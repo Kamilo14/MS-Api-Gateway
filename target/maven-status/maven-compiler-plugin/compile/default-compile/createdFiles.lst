@@ -1,0 +1,10 @@
+cl\catastrofescl\gateway\config\FirebaseConfig.class
+cl\catastrofescl\gateway\exception\GatewayExceptionHandler.class
+cl\catastrofescl\gateway\filter\FirebaseAuthenticationFilter.class
+cl\catastrofescl\gateway\config\GatewaySecurityProperties$RateLimit.class
+cl\catastrofescl\gateway\filter\RateLimitingFilter.class
+cl\catastrofescl\gateway\filter\SecurityHeadersFilter.class
+cl\catastrofescl\gateway\GatewayApplication.class
+cl\catastrofescl\gateway\config\GatewaySecurityProperties$Security.class
+cl\catastrofescl\gateway\config\GatewaySecurityProperties.class
+META-INF\spring-configuration-metadata.json

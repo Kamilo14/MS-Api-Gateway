@@ -207,8 +207,8 @@ Punto de entrada único para todas las peticiones del frontend. Valida el token 
 
 ### Tareas
 
-- [ ] Crear proyecto Spring Boot con dependencias: `spring-cloud-starter-gateway`, Firebase Admin SDK, `bucket4j` (rate limiting)
-- [ ] Configurar rutas en `application.yml`:
+- [x] Crear proyecto Spring Boot con dependencias: `spring-cloud-starter-gateway`, Firebase Admin SDK, `bucket4j` (rate limiting)
+- [x] Configurar rutas en `application.yml`:
   ```yaml
   spring:
     cloud:
@@ -239,10 +239,10 @@ Punto de entrada único para todas las peticiones del frontend. Valida el token 
             predicates:
               - Path=/notificaciones/**
   ```
-- [ ] Implementar `FiltroAutenticacionFirebase` — valida el token Firebase en cada request antes de enrutar
-- [ ] Implementar rate limiting con Bucket4j: máximo 100 requests/minuto por IP
-- [ ] Configurar CORS global para dominios de Vercel (dev: localhost, prod: dominio Vercel)
-- [ ] Configurar headers de seguridad globales (HSTS, X-Frame-Options, X-Content-Type-Options)
+- [x] Implementar `FiltroAutenticacionFirebase` — valida el token Firebase en cada request antes de enrutar
+- [x] Implementar rate limiting con Bucket4j: máximo 100 requests/minuto por IP
+- [x] Configurar CORS global para dominios de Vercel (dev: localhost, prod: dominio Vercel)
+- [x] Configurar headers de seguridad globales (HSTS, X-Frame-Options, X-Content-Type-Options)
 - [ ] Agregar al `docker-compose.yml` del repo `catastrofescl-infra`
 
 ### Entregables
