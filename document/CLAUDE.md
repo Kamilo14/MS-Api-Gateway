@@ -110,7 +110,9 @@ Estos 4 archivos son la memoria viva del proyecto. Claude los lee al inicio y lo
 
 ### Backend (Spring Boot — Java 21)
 
-**Estructura de paquetes obligatoria por microservicio:**
+#### Estructura de Microservicios de NEGOCIO (ms-identity, ms-resources, ms-citizen, etc.)
+
+**Estructura de paquetes obligatoria:**
 
 ```
 ms-{nombre}/
@@ -132,6 +134,44 @@ ms-{nombre}/
     ├── unit/            ← JUnit 5 + Mockito
     └── integration/     ← Testcontainers
 ```
+
+#### Estructura del GATEWAY (`ms-gateway`) — DIFERENTE (no sigue patrón de negocio)
+
+**`ms-gateway` es un proxy reactivo, NO un microservicio de negocio. Estructura diferente:**
+
+```
+ms-gateway/
+├── src/main/java/cl/catastrofescl/gateway/
+│   ├── config/
+│   │   ├── FirebaseConfig.java       ← Firebase Admin SDK init
+│   │   ├── CorsConfig.java           ← CORS centralizado (GlobalFilter complementaria)
+│   │   └── GatewaySecurityProperties ← propiedades inyectadas (@ConfigurationProperties)
+│   ├── filter/
+│   │   ├── FirebaseAuthenticationFilter  ← GlobalFilter: valida Bearer token
+│   │   ├── RateLimitingFilter            ← GlobalFilter: rate limiting por IP
+│   │   └── SecurityHeadersFilter         ← GlobalFilter: inyecta headers seguros
+│   └── exception/
+│       └── GatewayExceptionHandler   ← manejo de errores global en formato RFC 7807
+├── src/main/resources/
+│   ├── application.yml               ← rutas, CORS, Firebase config
+│   └── (NO migrations Flyway — Gateway no toca BD)
+└── (NO tests unitarios formales — es thin proxying layer)
+```
+
+**Diferencias clave del Gateway:**
+
+- ❌ **NO tiene** `SecurityConfig.java` — Spring Cloud Gateway usa `GlobalFilter`, no `@EnableWebSecurity`
+- ❌ **NO tiene** `@RestController` — es un proxy puro, enruta sin exponer lógica
+- ❌ **NO tiene** `Service` ni `Repository` — no procesa datos, solo traduce requests
+- ✅ **SÍ tiene** `CorsConfig.java` — centraliza configuración CORS (mejora mantenibilidad vs solo en `application.yml`)
+- ✅ **SÍ tiene** `GlobalFilter` — cadena de filtros reactivos (`FirebaseAuthenticationFilter`, `RateLimitingFilter`, `SecurityHeadersFilter`)
+- ✅ **SÍ tiene** `GatewaySecurityProperties` — inyecta rutas públicas desde `application.yml`
+
+**Por qué diferente:**
+
+- Los microservicios de negocio exponen lógica vía `@RestController` + `@Service`
+- El Gateway solo traduce: recibe petición → valida token → busca ruta por Path → suma identidad como header → enruta
+- Spring Cloud Gateway está optimizado para este patrón con `GlobalFilter`; no necesita `SecurityConfig` tradicional
 
 **Reglas de código obligatorias:**
 

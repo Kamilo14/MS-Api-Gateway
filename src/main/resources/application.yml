@@ -1,0 +1,99 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: catastrofecl-api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "https://catastrofescl.vercel.app"
+              - "https://dashboard.catastrofescl.vercel.app"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - Authorization
+              - Content-Type
+              - X-Requested-With
+              - Accept
+            exposedHeaders:
+              - X-Rate-Limit-Remaining
+            maxAge: 3600
+      routes:
+        - id: ms-identity
+          uri: ${MS_IDENTITY_URI:http://localhost:8081}
+          predicates:
+            - Path=/auth/**, /usuarios/**, /roles/**, /permisos/**, /solicitudes-rol/**
+
+        - id: ms-emergencies
+          uri: http://localhost:8082
+          predicates:
+            - Path=/emergencias/**, /anuncios/**
+
+        - id: ms-resources
+          uri: http://localhost:8083
+          predicates:
+            - Path=/centros/**, /inventario/**, /catalogo/**
+
+        - id: ms-citizen
+          uri: http://localhost:8084
+          predicates:
+            - Path=/necesidades/**, /donaciones/**
+
+        - id: ms-logistics
+          uri: http://localhost:8085
+          predicates:
+            - Path=/transferencias/**, /misiones/**, /rutas-voluntario/**
+
+        - id: ms-notifications
+          uri: http://localhost:8086
+          predicates:
+            - Path=/notificaciones/**
+
+gateway:
+  cors:
+    enabled: ${GATEWAY_CORS_ENABLED:true}
+  security:
+    public-paths:
+      - /auth/register
+      - /auth/login
+      - /auth/invitacion/aceptar
+      - /emergencias/activas
+      - /anuncios
+      - /necesidades/publicas
+      - /centros/datos-mapa
+      - /actuator/**
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-resources/**
+  rate-limit:
+    requests-per-minute: 100
+
+firebase:
+  enabled: ${FIREBASE_ENABLED:true}
+  credentials-path: ${FIREBASE_CREDENTIALS_PATH:}
+  project-id: ${FIREBASE_PROJECT_ID:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    cl.catastrofescl: DEBUG
+    org.springframework.cloud.gateway: INFO

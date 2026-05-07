@@ -1,1 +1,20 @@
-services: {}
+services:
+  ms-gateway:
+    build: .
+    container_name: ms-gateway
+    ports:
+      - "8080:8080"
+    env_file: .env
+    volumes:
+      - C:/Users/CAMILO/Desktop/CatastrofeCL-MS/MS-Identidad-Acceso-CatastrofeCL/MS-Identidad-y-Acceso-CatastrofeCL/src/main/resources/firebase-service-account.json:/etc/firebase/serviceAccountKey.json:ro
+    environment:
+      # Dentro de Docker, el gateway habla con el contenedor de identidad por nombre de servicio.
+      MS_IDENTITY_URI: ${MS_IDENTITY_URI:-http://ms-identity:8081}
+      # Para poder levantar el contenedor aunque no exista la key montada aún.
+      FIREBASE_ENABLED: ${FIREBASE_ENABLED:-false}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
+    restart: unless-stopped
+
+networks:
+  default:
+    name: catastrofecl-net

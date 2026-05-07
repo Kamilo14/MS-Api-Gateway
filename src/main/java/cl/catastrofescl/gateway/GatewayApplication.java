@@ -1,13 +1,13 @@
-package MsApiGateway.catastrofecl_api_gateway;
+package cl.catastrofescl.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CatastrofeclApiGatewayApplication {
+public class GatewayApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CatastrofeclApiGatewayApplication.class, args);
+		SpringApplication.run(GatewayApplication.class, args);
 	}
 
 }
