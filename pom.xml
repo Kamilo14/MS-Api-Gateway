@@ -41,6 +41,13 @@
 			<version>${firebase-admin.version}</version>
 		</dependency>
 
+		<!-- gRPC Netty requerido por Spring Cloud Gateway en esta versión -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty</artifactId>
+			<version>1.71.0</version>
+		</dependency>
+
 		<!-- Bucket4j — rate limiting por IP -->
 		<dependency>
 			<groupId>com.bucket4j</groupId>

@@ -31,7 +31,7 @@ spring:
             maxAge: 3600
       routes:
         - id: ms-identity
-          uri: http://localhost:8081
+          uri: ${MS_IDENTITY_URI:http://localhost:8081}
           predicates:
             - Path=/auth/**, /usuarios/**, /roles/**, /permisos/**, /solicitudes-rol/**
 
@@ -61,6 +61,8 @@ spring:
             - Path=/notificaciones/**
 
 gateway:
+  cors:
+    enabled: ${GATEWAY_CORS_ENABLED:true}
   security:
     public-paths:
       - /auth/register

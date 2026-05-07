@@ -205,6 +205,35 @@ BD: catastrofescl_db (única instancia — contenedor Docker)
 
 Punto de entrada único para todas las peticiones del frontend. Valida el token Firebase, aplica rate limiting por IP y enruta cada petición al microservicio correspondiente según el path.
 
+### Arquitectura — Patrón GlobalFilter (NO es Spring Security tradicional)
+
+**El Gateway NO tiene:**
+- ❌ `SecurityConfig.java` — Spring Cloud Gateway no usa `@EnableWebSecurity`
+- ❌ Controllers de negocio — es un proxy puro, solo enruta
+- ❌ `@RestController` — no expone lógica, solo traduce requests
+
+**El Gateway SÍ tiene:**
+- ✅ `GlobalFilter` — cadena de filtros reactivos (`FirebaseAuthenticationFilter`, `RateLimitingFilter`, `SecurityHeadersFilter`)
+- ✅ `CorsConfig.java` — configuración centralizada de CORS (simplifica `application.yml`)
+- ✅ `application.yml` — rutas y propiedades de configuración
+
+**Flujo de un request:**
+```
+Cliente → Gateway:8080
+    ↓
+OPTIONS (preflight)? → CORS permitido → responde 200 + headers
+    ↓
+Authentication Filter → valida Bearer token Firebase
+    ↓
+Rate Limiting Filter → verifica límite por IP
+    ↓
+Security Headers Filter → inyecta HSTS, X-Frame-Options, etc.
+    ↓
+Route matching → busca ruta por Path predicate
+    ↓
+Load Balance → suma identidad (X-Firebase-Uid header) → microservicio downstream
+```
+
 ### Tareas
 
 - [x] Crear proyecto Spring Boot con dependencias: `spring-cloud-starter-gateway`, Firebase Admin SDK, `bucket4j` (rate limiting)
@@ -239,10 +268,11 @@ Punto de entrada único para todas las peticiones del frontend. Valida el token 
             predicates:
               - Path=/notificaciones/**
   ```
-- [x] Implementar `FiltroAutenticacionFirebase` — valida el token Firebase en cada request antes de enrutar
-- [x] Implementar rate limiting con Bucket4j: máximo 100 requests/minuto por IP
-- [x] Configurar CORS global para dominios de Vercel (dev: localhost, prod: dominio Vercel)
-- [x] Configurar headers de seguridad globales (HSTS, X-Frame-Options, X-Content-Type-Options)
+- [x] Implementar `FirebaseAuthenticationFilter` (GlobalFilter) — valida el token Firebase en cada request antes de enrutar
+- [x] Implementar `RateLimitingFilter` (GlobalFilter) — máximo 100 requests/minuto por IP con Bucket4j
+- [x] Implementar `SecurityHeadersFilter` (GlobalFilter) — inyecta HSTS, X-Frame-Options, X-Content-Type-Options
+- [x] Crear `CorsConfig.java` — configuración centralizada de CORS (complementa `application.yml`)
+- [x] Configurar headers de seguridad globales y CORS para orígenes permitidos (local + Vercel)
 - [ ] Agregar al `docker-compose.yml` del repo `catastrofescl-infra`
 
 ### Entregables
@@ -251,6 +281,8 @@ Punto de entrada único para todas las peticiones del frontend. Valida el token 
 - Todas las rutas configuradas y enrutando correctamente a cada MS
 - Validación de token Firebase funcionando en el gateway
 - Rate limiting activo
+- CORS centralizado en `CorsConfig.java`
+- Headers de seguridad inyectados automáticamente
 
 ---
 

@@ -48,6 +48,30 @@
 
 ## Registro de Avances
 
+### [2026-05-06] Centralización de configuración CORS en CorsConfig.java
+
+**Integrante(s):** Claude  
+**Fase trabajada:** Fase 0.5 — MS Gateway
+
+#### Completado
+- Se creó `CorsConfig.java` en `src/main/java/cl/catastrofescl/gateway/config/` con configuración CORS centralizada.
+- Se agregó soporte para desactivar CORS con la propiedad `gateway.cors.enabled` (default: true).
+- Se agregó `GATEWAY_CORS_ENABLED=true` en `.env` para control por variables de entorno.
+- Se actualizó `application.yml` para soportar la nueva propiedad de configuración.
+- Documentación clara en `CorsConfig.java` explicando orígenes permitidos, métodos, headers y credenciales.
+
+#### En progreso
+- Ninguno.
+
+#### Bloqueadores
+- Ninguno.
+
+#### Próximos pasos
+- Compilar y verificar que el Gateway siga inicializando sin errores.
+- Probar CORS desde el frontend con validación de headers de respuesta.
+
+---
+
 ### [2026-05-05] Implementación del MS Gateway (Fase 0.5)
 
 **Integrante(s):** Claude  
