@@ -35,13 +35,36 @@ spring:
           predicates:
             - Path=/auth/**, /usuarios/**, /roles/**, /permisos/**, /solicitudes-rol/**
 
-        - id: ms-emergencies
-          uri: http://localhost:8082
+        # MS expone /emergencies y /announcements; el gateway acepta rutas en español y reescribe.
+        - id: ms-emergencies-ruta
+          uri: ${MS_EMERGENCIES_URI:http://localhost:8082}
           predicates:
-            - Path=/emergencias/**, /anuncios/**
+            - Path=/emergencias/**
+          filters:
+            - RewritePath=/emergencias/activas/geojson,/emergencies/active/geojson
+            - RewritePath=/emergencias/activas,/emergencies/active
+            - RewritePath=/emergencias/(?<id>[a-fA-F0-9-]{36})/estado,/emergencies/${id}/status
+            - RewritePath=/emergencias/(?<id>[a-fA-F0-9-]{36}),/emergencies/${id}
+            - RewritePath=/emergencias,/emergencies
+
+        - id: ms-emergencies-anuncios
+          uri: ${MS_EMERGENCIES_URI:http://localhost:8082}
+          predicates:
+            - Path=/anuncios/**
+          filters:
+            - RewritePath=/anuncios(?<rest>.*),/announcements${rest}
+
+        # Alias en español: el frontend usa /centros-acopio; el MS de recursos expone /centros.
+        - id: ms-resources-centros-acopio
+          uri: ${MS_RESOURCES_URI:http://localhost:8083}
+          predicates:
+            - Path=/centros-acopio,/centros-acopio/**
+          filters:
+            - RewritePath=/centros-acopio(?<rest>/.*),/centros${rest}
+            - RewritePath=/centros-acopio,/centros
 
         - id: ms-resources
-          uri: http://localhost:8083
+          uri: ${MS_RESOURCES_URI:http://localhost:8083}
           predicates:
             - Path=/centros/**, /inventario/**, /catalogo/**
 
@@ -69,7 +92,10 @@ gateway:
       - /auth/login
       - /auth/invitacion/aceptar
       - /emergencias/activas
+      - /emergencias/activas/geojson
+      - /emergencias/activas/**
       - /anuncios
+      - /anuncios/**
       - /necesidades/publicas
       - /centros/datos-mapa
       - /actuator/**
