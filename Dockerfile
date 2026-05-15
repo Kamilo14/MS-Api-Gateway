@@ -45,7 +45,7 @@ EXPOSE 8080
 
 # Health check (verifica que el gateway esté respondiendo)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health/liveness || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
 # Variables de entorno con valores por defecto para desarrollo local
 ENV JAVA_OPTS="-Xmx256m -Xms128m"
