@@ -17,4 +17,6 @@ services:
 
 networks:
   default:
+    external: true
     name: catastrofecl-net
+

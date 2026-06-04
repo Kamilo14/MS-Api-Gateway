@@ -3,6 +3,7 @@ C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastro
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\config\GatewaySecurityProperties.java
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\exception\GatewayExceptionHandler.java
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\FirebaseAuthenticationFilter.java
+C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\FirebaseDisabledPassthroughFilter.java
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\RateLimitingFilter.java
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\SecurityHeadersFilter.java
 C:\Users\CAMILO\Desktop\CatastrofeCL-MS\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\GatewayApplication.java

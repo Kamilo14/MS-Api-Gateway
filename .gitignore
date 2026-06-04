@@ -16,3 +16,4 @@
 /src/main/resources/firebase-service-account.json
 /secrets/
 DOCKER.md
+.env
