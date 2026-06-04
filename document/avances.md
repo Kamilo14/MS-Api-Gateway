@@ -7,7 +7,8 @@
 
 | Fase | Nombre | Estado | % Completado |
 |---|---|---|---|
-| Fase 0 | Fundamentos e Infraestructura | 🔄 En progreso | 50% |
+| Fase 0 | Fundamentos e Infraestructura | 🔄 En progreso | 80% |
+| Fase 0.5| MS Gateway (API Gateway)       | ✅ Completado | 100% |
 | Fase 1 | MS Identidad y Acceso | ✅ Completado | 100% |
 | Fase 2 | MS Operaciones de Recursos | ⬜ No iniciado | 0% |
 | Fase 3 | MS Participación Ciudadana | ⬜ No iniciado | 0% |
@@ -46,6 +47,53 @@
 ---
 
 ## Registro de Avances
+
+### [2026-05-06] Centralización de configuración CORS en CorsConfig.java
+
+**Integrante(s):** Claude  
+**Fase trabajada:** Fase 0.5 — MS Gateway
+
+#### Completado
+- Se creó `CorsConfig.java` en `src/main/java/cl/catastrofescl/gateway/config/` con configuración CORS centralizada.
+- Se agregó soporte para desactivar CORS con la propiedad `gateway.cors.enabled` (default: true).
+- Se agregó `GATEWAY_CORS_ENABLED=true` en `.env` para control por variables de entorno.
+- Se actualizó `application.yml` para soportar la nueva propiedad de configuración.
+- Documentación clara en `CorsConfig.java` explicando orígenes permitidos, métodos, headers y credenciales.
+
+#### En progreso
+- Ninguno.
+
+#### Bloqueadores
+- Ninguno.
+
+#### Próximos pasos
+- Compilar y verificar que el Gateway siga inicializando sin errores.
+- Probar CORS desde el frontend con validación de headers de respuesta.
+
+---
+
+### [2026-05-05] Implementación del MS Gateway (Fase 0.5)
+
+**Integrante(s):** Claude  
+**Fase trabajada:** Fase 0.5 — MS Gateway
+
+#### Completado
+- Se implementó Spring Cloud Gateway reactivo con validación de tokens Firebase (`FirebaseAuthenticationFilter`).
+- Se implementó Rate Limiting usando Bucket4j en memoria (`RateLimitingFilter`).
+- Se agregaron Headers de Seguridad en las respuestas (`SecurityHeadersFilter`).
+- Se centralizó el manejo de excepciones de Gateway con formato RFC 7807 (`GatewayExceptionHandler`).
+- Se configuraron las rutas para los 6 microservicios y CORS global en `application.yml`.
+- Se compiló el proyecto de forma exitosa.
+- Se actualizaron archivos de estado del proyecto.
+
+#### En progreso
+- Integración en `docker-compose.yml` del repositorio de infraestructura (pendiente, ya que el repositorio `catastrofescl-infra` no se encuentra en el entorno actual).
+
+#### Bloqueadores
+- Ninguno.
+
+#### Próximos pasos
+- Continuar con la Fase 2 (MS Operaciones de Recursos) u otra fase requerida por el usuario.
 
 ### [2026-05-04] Cierre de Fase 1 — MS Identidad y Acceso
 
@@ -330,7 +378,7 @@
 | Redis | ⬜ | ⬜ |
 | RabbitMQ | ⬜ | ⬜ |
 | Firebase Auth | ⬜ | ⬜ |
-| API Gateway | ⬜ | ⬜ |
+| API Gateway | ✅ | ⬜ |
 | EKS Cluster | N/A | ⬜ |
 | Lambda + SES | ⬜ | ⬜ |
 | CI/CD Pipeline | ⬜ | ⬜ |

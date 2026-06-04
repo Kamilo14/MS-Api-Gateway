@@ -20,6 +20,15 @@
 
 ## Cambios Aplicados
 
+### [ARR-011] Implementación de API Gateway (Fase 0.5)
+- **Fecha:** 2026-05-05
+- **Autor:** Claude
+- **Tipo:** Feature
+- **Error relacionado:** N/A
+- **Descripción del cambio:** Se implementó `ms-gateway` usando Spring Cloud Gateway (reactivo). Se eliminaron las dependencias legacy WebMVC e integró validación Firebase Admin SDK (bloqueante manejado con Mono.fromCallable), rate limiting con Bucket4j en memoria y configuración de Headers de Seguridad. Además se implementó un `GatewayExceptionHandler` para devolver siempre formato RFC 7807 (Problem Details).
+- **Archivos afectados:** `pom.xml`, `application.yml`, `GatewayApplication.java`, `FirebaseAuthenticationFilter.java`, `RateLimitingFilter.java`, `SecurityHeadersFilter.java`, `GatewayExceptionHandler.java`, `.env`
+- **Tests actualizados:** N/A
+
 ### [ARR-010] Cierre técnico de Fase 1 con endpoints faltantes y suite de pruebas inicial
 - **Fecha:** 2026-05-04
 - **Autor:** Claude

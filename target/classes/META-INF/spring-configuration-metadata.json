@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "name": "gateway",
+      "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties"
+    },
+    {
+      "name": "gateway.rate-limit",
+      "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$RateLimit",
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
+      "sourceMethod": "public cl.catastrofescl.gateway.config.GatewaySecurityProperties.RateLimit getRateLimit() "
+    },
+    {
+      "name": "gateway.security",
+      "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Security",
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
+      "sourceMethod": "public cl.catastrofescl.gateway.config.GatewaySecurityProperties.Security getSecurity() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "gateway.rate-limit.requests-per-minute",
+      "type": "java.lang.Integer",
+      "description": "Máximo de requests por minuto por IP.",
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$RateLimit"
+    },
+    {
+      "name": "gateway.security.public-paths",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Rutas que no requieren token Firebase (públicas). Soporta patrones Ant: \/auth\/register, \/emergencias\/activas, \/actuator\/**",
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Security"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}
