@@ -46,13 +46,37 @@ spring:
             - RewritePath=/emergencias/(?<id>[a-fA-F0-9-]{36})/estado,/emergencies/${id}/status
             - RewritePath=/emergencias/(?<id>[a-fA-F0-9-]{36}),/emergencies/${id}
             - RewritePath=/emergencias,/emergencies
+            - name: CircuitBreaker
+              args:
+                name: msEmergenciesCb
+            - name: Retry
+              args:
+                retries: 2
+                methods: GET,HEAD
+                backoff:
+                  firstBackoff: 150ms
+                  maxBackoff: 2s
+                # Solo reintentar fallos de red / upstream caído (no 500 de negocio/BD)
+                statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE,GATEWAY_TIMEOUT
 
         - id: ms-emergencies-anuncios
           uri: ${MS_EMERGENCIES_URI:http://localhost:8082}
           predicates:
-            - Path=/anuncios/**
+            # /anuncios sola + subrutas (p. ej. ?page= en query string usa el mismo path)
+            - Path=/anuncios,/anuncios/**
           filters:
             - RewritePath=/anuncios(?<rest>.*),/announcements${rest}
+            - name: CircuitBreaker
+              args:
+                name: msEmergenciesCb
+            - name: Retry
+              args:
+                retries: 2
+                methods: GET,HEAD
+                backoff:
+                  firstBackoff: 150ms
+                  maxBackoff: 2s
+                statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE,GATEWAY_TIMEOUT
 
         # Alias en español: el frontend usa /centros-acopio; el MS de recursos expone /centros.
         - id: ms-resources-centros-acopio
@@ -86,6 +110,9 @@ spring:
 gateway:
   cors:
     enabled: ${GATEWAY_CORS_ENABLED:true}
+  # Solo desarrollo: si Firebase está apagado, inyectar X-Firebase-Uid para que ms-emergencies (dev-trust-gateway) autorice POST/PATCH.
+  dev:
+    impersonate-firebase-uid: ${GATEWAY_IMPERSONATE_FIREBASE_UID:}
   security:
     public-paths:
       - /auth/register
@@ -98,6 +125,8 @@ gateway:
       - /anuncios/**
       - /necesidades/publicas
       - /centros/datos-mapa
+      - /centros-acopio
+      - /centros-acopio/**
       - /actuator/**
       - /v3/api-docs/**
       - /swagger-ui/**
@@ -123,3 +152,28 @@ logging:
   level:
     cl.catastrofescl: DEBUG
     org.springframework.cloud.gateway: INFO
+
+# Circuit breaker compartido para todo el tráfico hacia ms-emergencies (emergencias + anuncios).
+# Cuando abre, el filtro CircuitBreaker del Gateway devuelve 503 hasta pasar a half-open.
+# timeoutDuration controla cuánto espera el filtro antes de abortar la llamada upstream.
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 8s
+        cancelRunningFuture: true
+    instances:
+      msEmergenciesCb:
+        baseConfig: default
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 45s
+    instances:
+      msEmergenciesCb:
+        baseConfig: default

@@ -15,9 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
+
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -37,6 +40,7 @@ import java.time.Instant;
  * Orden: 1 (se ejecuta antes que rate limiting y headers de seguridad).
  */
 @Component
+@ConditionalOnProperty(name = "firebase.enabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
 @Slf4j
 public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
@@ -81,6 +85,19 @@ public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
         // Validar token con Firebase (bloqueante → envuelto en Mono con scheduler elástico)
         return Mono.fromCallable(() -> firebaseAuth.verifyIdToken(idToken))
                 .subscribeOn(Schedulers.boundedElastic())
+                .onErrorResume(FirebaseAuthException.class, ex -> {
+                    log.warn("Token Firebase inválido: {}", ex.getMessage());
+                    return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                            "El token Firebase proporcionado es inválido o ha expirado."));
+                })
+                .onErrorResume(Exception.class, ex -> {
+                    // Solo capturamos errores de la llamada a Firebase.
+                    // Si el error viene del chain.filter (downstream), no entrará aquí
+                    // si lo ponemos ANTES del flatMap.
+                    log.error("Error inesperado al validar token Firebase: {}", ex.getMessage(), ex);
+                    return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                            "Error interno al validar las credenciales de autenticación."));
+                })
                 .flatMap(decodedToken -> {
                     log.debug("Token válido — UID: {}, email: {}",
                             decodedToken.getUid(), decodedToken.getEmail());
@@ -93,22 +110,10 @@ public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
                             .build();
 
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
-                })
-                .onErrorResume(FirebaseAuthException.class, ex -> {
-                    log.warn("Token Firebase inválido: {}", ex.getMessage());
-                    return responderError(exchange, HttpStatus.UNAUTHORIZED,
-                            "TOKEN_INVALIDO",
-                            "El token Firebase proporcionado es inválido o ha expirado.",
-                            path);
-                })
-                .onErrorResume(Exception.class, ex -> {
-                    log.error("Error inesperado al validar token Firebase: {}", ex.getMessage(), ex);
-                    return responderError(exchange, HttpStatus.INTERNAL_SERVER_ERROR,
-                            "ERROR_AUTENTICACION",
-                            "Error interno al validar las credenciales de autenticación.",
-                            path);
                 });
     }
+
+
 
     /**
      * Verifica si la ruta solicitada coincide con alguna ruta pública configurada.

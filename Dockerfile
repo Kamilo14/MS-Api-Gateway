@@ -33,6 +33,8 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
+RUN apk add --no-cache wget
+
 # Copiar JAR desde etapa de build
 COPY --from=builder /app/target/*.jar app.jar
 
