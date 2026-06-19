@@ -93,17 +93,17 @@ spring:
             - Path=/centros/**, /inventario/**, /catalogo/**
 
         - id: ms-citizen
-          uri: http://localhost:8084
+          uri: ${MS_CITIZEN_URI:http://localhost:8084}
           predicates:
-            - Path=/necesidades/**, /donaciones/**
+            - Path=/necesidades,/necesidades/**, /donaciones,/donaciones/**
 
         - id: ms-logistics
-          uri: http://localhost:8085
+          uri: ${MS_LOGISTICS_URI:http://localhost:8085}
           predicates:
-            - Path=/transferencias/**, /misiones/**, /rutas-voluntario/**
+            - Path=/transferencias,/transferencias/**, /misiones,/misiones/**, /rutas-voluntario,/rutas-voluntario/**
 
         - id: ms-notifications
-          uri: http://localhost:8086
+          uri: ${MS_NOTIFICATIONS_URI:http://localhost:8086}
           predicates:
             - Path=/notificaciones/**
 
