@@ -42,19 +42,18 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
-        // Orígenes permitidos
-        List<String> allowedOrigins = Arrays.asList(
-                // Desarrollo local
-                "http://localhost:3000",      // Frontend principal (React/Next.js)
-                "http://localhost:3001",      // Frontend alternativo / dashboard
-                "http://localhost:5173",      // Vite dev server (frontend)
-                "http://localhost:5174",      // Vite dev server alternativo
-                // Staging/Producción
-                "https://catastrofescl.vercel.app",      // Frontend PROD
-                "https://dashboard.catastrofescl.vercel.app"  // Dashboard PROD
+        // Orígenes permitidos (patrones para dev local: localhost, 127.0.0.1, IP de red)
+        List<String> allowedOriginPatterns = Arrays.asList(
+                "http://localhost:*",
+                "http://127.0.0.1:*",
+                "http://[::1]:*",
+                "http://172.*.*.*:*",
+                "http://192.168.*.*:*",
+                "http://10.*.*.*:*",
+                "https://*.vercel.app"
         );
-        corsConfig.setAllowedOrigins(allowedOrigins);
-        log.info("CORS: Orígenes permitidos configurados: {}", allowedOrigins);
+        corsConfig.setAllowedOriginPatterns(allowedOriginPatterns);
+        log.info("CORS: Patrones de origen permitidos: {}", allowedOriginPatterns);
 
         // Métodos HTTP permitidos
         corsConfig.setAllowedMethods(Arrays.asList(
