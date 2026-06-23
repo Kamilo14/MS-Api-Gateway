@@ -93,7 +93,7 @@ spring:
         - id: ms-resources
           uri: ${MS_RESOURCES_URI:http://localhost:8083}
           predicates:
-            - Path=/centros/**, /inventario/**, /catalogo/**
+            - Path=/centros/**, /inventario/**, /catalogo/**, /categorias, /categorias/**
 
         - id: ms-citizen
           uri: ${MS_CITIZEN_URI:http://localhost:8084}
@@ -127,7 +127,8 @@ gateway:
       - /anuncios
       - /anuncios/**
       - /necesidades/publicas
-      - /centros/datos-mapa
+      # ms-resources expone GET /centros/map-data (datos optimizados de mapa) como publico
+      - /centros/map-data
       - /centros-acopio
       - /centros-acopio/**
       - /actuator/**
@@ -159,11 +160,14 @@ logging:
 # Circuit breaker compartido para todo el tráfico hacia ms-emergencies (emergencias + anuncios).
 # Cuando abre, el filtro CircuitBreaker del Gateway devuelve 503 hasta pasar a half-open.
 # timeoutDuration controla cuánto espera el filtro antes de abortar la llamada upstream.
+# 30s: las operaciones de escritura (declarar emergencia con centros de acopio + persistencia
+# PostGIS + publicación de eventos a RabbitMQ) superan los 8s previos, sobre todo en frío,
+# y al abortar con cancelRunningFuture el cliente recibía un error de red sin respuesta.
 resilience4j:
   timelimiter:
     configs:
       default:
-        timeoutDuration: 8s
+        timeoutDuration: 30s
         cancelRunningFuture: true
     instances:
       msEmergenciesCb:
