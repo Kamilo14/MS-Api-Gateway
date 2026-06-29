@@ -3,7 +3,7 @@ name: Publicar imagen docker en aws
 on:
   push:
     branches:
-      - aws
+      - aws/deploy
 
 jobs:
   build-and-push-aws:
@@ -30,4 +30,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/catastrofescl/ms-api-gateway:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/catastrofescl-ms-gateway:latest

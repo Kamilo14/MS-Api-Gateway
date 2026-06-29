@@ -52,7 +52,7 @@ public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String HEADER_FIREBASE_UID = "X-Firebase-Uid";
     private static final String HEADER_FIREBASE_EMAIL = "X-Firebase-Email";
-
+//Se valida el token de Firebase para autenticar el usuario
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
