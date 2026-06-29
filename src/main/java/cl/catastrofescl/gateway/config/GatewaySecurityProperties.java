@@ -23,7 +23,7 @@ public class GatewaySecurityProperties {
     @Data
     public static class Security {
         /**
-         * Rutas que no requieren token Firebase (públicas).
+         * Rutas que no requieren token  (públicas).
          * Soporta patrones Ant: /auth/register, /emergencias/activas, /actuator/**
          */
         private List<String> publicPaths = new ArrayList<>();

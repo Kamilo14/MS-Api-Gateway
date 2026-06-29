@@ -28,7 +28,7 @@
     {
       "name": "gateway.security.public-paths",
       "type": "java.util.List<java.lang.String>",
-      "description": "Rutas que no requieren token Firebase (públicas). Soporta patrones Ant: \/auth\/register, \/emergencias\/activas, \/actuator\/**",
+      "description": "Rutas que no requieren token (públicas). Soporta patrones Ant: \/auth\/register, \/emergencias\/activas, \/actuator\/**",
       "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Security"
     }
   ],
