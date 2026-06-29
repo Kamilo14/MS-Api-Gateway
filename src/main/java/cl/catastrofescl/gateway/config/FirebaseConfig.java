@@ -32,7 +32,7 @@ public class FirebaseConfig {
 
     @Value("${firebase.project-id:}")
     private String projectId;
-//Inicializar Firebase Admin SDK
+//Inicializar Firebase 
     @PostConstruct
     public void inicializarFirebase() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
