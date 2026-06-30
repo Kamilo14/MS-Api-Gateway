@@ -31,3 +31,5 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/catastrofescl-api-gateway:latest
+
+# DEPLOY AWS
