@@ -1,6 +1,7 @@
 package cl.catastrofescl.gateway.filter;
 
 import cl.catastrofescl.gateway.config.GatewaySecurityProperties;
+import cl.catastrofescl.gateway.util.LectorRolesDeclarados;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -99,17 +100,20 @@ public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
                             "Error interno al validar las credenciales de autenticación."));
                 })
                 .flatMap(decodedToken -> {
-                    log.debug("Token válido — UID: {}, email: {}",
-                            decodedToken.getUid(), decodedToken.getEmail());
+                    String rolesDeclarados = LectorRolesDeclarados.comoListaSeparadaPorComa(
+                            LectorRolesDeclarados.desdeClaimsFirebase(decodedToken.getClaims()));
+                    log.debug("Token valido uid={} email={} roles={}",
+                            decodedToken.getUid(), decodedToken.getEmail(), rolesDeclarados);
 
-                    // Inyectar identidad del usuario como headers hacia el microservicio downstream
-                    ServerHttpRequest mutatedRequest = request.mutate()
+                    ServerHttpRequest.Builder requestBuilder = request.mutate()
                             .header(HEADER_FIREBASE_UID, decodedToken.getUid())
                             .header(HEADER_FIREBASE_EMAIL,
-                                    decodedToken.getEmail() != null ? decodedToken.getEmail() : "")
-                            .build();
+                                    decodedToken.getEmail() != null ? decodedToken.getEmail() : "");
+                    if (!rolesDeclarados.isBlank()) {
+                        requestBuilder.header(LectorRolesDeclarados.HEADER_DEV_ROLES, rolesDeclarados);
+                    }
 
-                    return chain.filter(exchange.mutate().request(mutatedRequest).build());
+                    return chain.filter(exchange.mutate().request(requestBuilder.build()).build());
                 });
     }
 

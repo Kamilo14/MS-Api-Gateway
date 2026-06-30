@@ -8,4 +8,5 @@ cl\catastrofescl\gateway\config\GatewaySecurityProperties$Security.class
 META-INF\spring-configuration-metadata.json
 cl\catastrofescl\gateway\filter\RateLimitingFilter.class
 cl\catastrofescl\gateway\filter\SecurityHeadersFilter.class
+cl\catastrofescl\gateway\util\LectorRolesDeclarados.class
 cl\catastrofescl\gateway\config\GatewaySecurityProperties.class
