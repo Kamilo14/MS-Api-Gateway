@@ -102,8 +102,8 @@ public class FirebaseAuthenticationFilter implements GlobalFilter, Ordered {
                 .flatMap(decodedToken -> {
                     String rolesDeclarados = LectorRolesDeclarados.comoListaSeparadaPorComa(
                             LectorRolesDeclarados.desdeClaimsFirebase(decodedToken.getClaims()));
-                    log.debug("Token valido uid={} email={} roles={}",
-                            decodedToken.getUid(), decodedToken.getEmail(), rolesDeclarados);
+                    log.info("Token valido path={} uid={} roles={} -> reenviando downstream",
+                            path, decodedToken.getUid(), rolesDeclarados);
 
                     ServerHttpRequest.Builder requestBuilder = request.mutate()
                             .header(HEADER_FIREBASE_UID, decodedToken.getUid())

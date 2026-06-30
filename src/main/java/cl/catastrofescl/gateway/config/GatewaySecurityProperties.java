@@ -19,6 +19,21 @@ public class GatewaySecurityProperties {
 
     private Security security = new Security();
     private RateLimit rateLimit = new RateLimit();
+    private Cors cors = new Cors();
+
+    @Data
+    public static class Cors {
+        /**
+         * Origen público del frontend (p. ej. http://54.x.x.x:3000 en ECS).
+         * Next.js reenvía el header Origin al gateway; si no está permitido, CORS responde 403 vacío
+         * y la petición nunca llega al microservicio downstream.
+         */
+        private String frontendOrigin = "http://localhost:3000";
+        /**
+         * Patrones extra (CSV) vía {@code GATEWAY_CORS_EXTRA_ORIGIN_PATTERNS}.
+         */
+        private String extraOriginPatternsCsv = "";
+    }
 
     @Data
     public static class Security {

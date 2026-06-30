@@ -16,6 +16,7 @@ spring:
               - "http://172.*.*.*:*"
               - "http://192.168.*.*:*"
               - "http://10.*.*.*:*"
+              - "${FRONTEND_ORIGIN:http://localhost:3000}"
               - "https://*.vercel.app"
             allowedMethods:
               - GET
@@ -113,6 +114,8 @@ spring:
 gateway:
   cors:
     enabled: ${GATEWAY_CORS_ENABLED:true}
+    frontend-origin: ${FRONTEND_ORIGIN:http://localhost:3000}
+    extra-origin-patterns-csv: ${GATEWAY_CORS_EXTRA_ORIGIN_PATTERNS:}
   # Solo desarrollo: si Firebase está apagado, inyectar X-Firebase-Uid para que ms-emergencies (dev-trust-gateway) autorice POST/PATCH.
   dev:
     impersonate-firebase-uid: ${GATEWAY_IMPERSONATE_FIREBASE_UID:}
