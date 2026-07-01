@@ -2,6 +2,7 @@ C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_de
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\config\FirebaseConfig.java
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\config\GatewaySecurityProperties.java
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\exception\GatewayExceptionHandler.java
+C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\FiltroRegistroSolicitudes.java
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\FirebaseAuthenticationFilter.java
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\FirebaseDisabledPassthroughFilter.java
 C:\Users\alfon\Desktop\INGENIERIA_INFORMATICA_DUOC\fullStack3\proyecto_equipo_desastres\ms-api-gateway\MS-Api-Gateway\src\main\java\cl\catastrofescl\gateway\filter\RateLimitingFilter.java

@@ -37,6 +37,7 @@ public class CorsConfig {
                 "http://172.*.*.*:*",
                 "http://192.168.*.*:*",
                 "http://10.*.*.*:*",
+                "http://*:*",
                 "https://*.vercel.app"
         ));
 

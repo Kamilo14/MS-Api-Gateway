@@ -8,46 +8,40 @@
     {
       "name": "gateway.cors",
       "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
-      "sourceMethod": "public cl.catastrofescl.gateway.config.GatewaySecurityProperties.Cors getCors() "
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties"
     },
     {
       "name": "gateway.rate-limit",
       "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$RateLimit",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
-      "sourceMethod": "public cl.catastrofescl.gateway.config.GatewaySecurityProperties.RateLimit getRateLimit() "
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties"
     },
     {
       "name": "gateway.security",
       "type": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Security",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties",
-      "sourceMethod": "public cl.catastrofescl.gateway.config.GatewaySecurityProperties.Security getSecurity() "
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties"
     }
   ],
   "properties": [
     {
-      "name": "gateway.cors.extra-origin-patterns",
-      "type": "java.util.List<java.lang.String>",
-      "description": "Patrones adicionales separados por coma vía env GATEWAY_CORS_EXTRA_ORIGIN_PATTERNS.",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors"
-    },
-    {
       "name": "gateway.cors.extra-origin-patterns-csv",
       "type": "java.lang.String",
       "description": "Patrones extra (CSV) vía {@code GATEWAY_CORS_EXTRA_ORIGIN_PATTERNS}.",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors"
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors",
+      "defaultValue": ""
     },
     {
       "name": "gateway.cors.frontend-origin",
       "type": "java.lang.String",
       "description": "Origen público del frontend (p. ej. http:\/\/54.x.x.x:3000 en ECS). Next.js reenvía el header Origin al gateway; si no está permitido, CORS responde 403 vacío y la petición nunca llega al microservicio downstream.",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors"
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$Cors",
+      "defaultValue": "http:\/\/localhost:3000"
     },
     {
       "name": "gateway.rate-limit.requests-per-minute",
       "type": "java.lang.Integer",
       "description": "Máximo de requests por minuto por IP.",
-      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$RateLimit"
+      "sourceType": "cl.catastrofescl.gateway.config.GatewaySecurityProperties$RateLimit",
+      "defaultValue": 100
     },
     {
       "name": "gateway.security.public-paths",
